@@ -53,3 +53,7 @@ buck-out/
 .expo/
 web-build/
 dist/
+
+# My Notes
+notes.txt
+README.md
