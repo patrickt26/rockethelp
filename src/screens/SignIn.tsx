@@ -2,6 +2,7 @@ import { Heading, VStack, Icon, useTheme } from 'native-base';
 import { Envelope, Key } from 'phosphor-react-native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 import Logo from '../assets/logo_primary.svg';
 
@@ -9,6 +10,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,6 +20,27 @@ export function SignIn() {
     if (!email || !password) {
       return Alert.alert('Entrar', 'Informe e-mail e senha');
     }
+
+    setIsLoading(true);
+
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+
+        switch (error.code) {
+          case 'auth/invalid-email':
+            return Alert.alert('Entrar', 'Formato de e-mail inválido.');
+          
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            return Alert.alert('Entrar', 'E-mail ou senha inválido.');
+          
+          default:
+            return Alert.alert('Entrar', 'Ocorreu um problema, tente novamente mais tarde.');
+        }
+      })
   }
 
   return (
@@ -47,7 +70,12 @@ export function SignIn() {
         secureTextEntry
       />
 
-      <Button title="Entrar" w="full" onPress={handleSignIn} />
+      <Button
+        title="Entrar"
+        w="full"
+        onPress={handleSignIn}
+        isLoading={isLoading}
+      />
     </VStack>
   );
 }
