@@ -1,6 +1,7 @@
 import { Heading, VStack, Icon, useTheme } from 'native-base';
 import { Envelope, Key } from 'phosphor-react-native';
 import { useState } from 'react';
+import { Alert } from 'react-native';
 
 import Logo from '../assets/logo_primary.svg';
 
@@ -14,7 +15,9 @@ export function SignIn() {
   const { colors } = useTheme();
 
   function handleSignIn() {
-    console.log(email, password);
+    if (!email || !password) {
+      return Alert.alert('Entrar', 'Informe e-mail e senha');
+    }
   }
 
   return (
