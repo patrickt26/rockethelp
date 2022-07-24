@@ -34,7 +34,7 @@ export function Header({ title, ...rest }: HeaderProps) {
         color="gray.100"
         textAlign="center"
         fontSize="lg"
-        ml={-6}
+        ml={-10}
       >
         {title}
       </Heading>
